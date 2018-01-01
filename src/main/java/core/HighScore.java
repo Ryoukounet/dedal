@@ -1,22 +1,26 @@
 package core;
 
 public class HighScore {
+
+    private static HighScore instance;
     private int valeur;
 
     private HighScore() {
-
+        this.valeur = 0;
     }
 
-    private static class HighScoreHolder {
-        public static final HighScore INSTANCE = new HighScore();
+    public synchronized static HighScore getInstance() {
+        if (instance == null) {
+            instance = new HighScore();
+        }
+        return instance;
     }
 
-    public static HighScore getInstance() {
-        return HighScoreHolder.INSTANCE;
+    public int getValeur() {
+        return valeur;
     }
 
-    protected Object readResolve() {
-        return getInstance();
+    public void setValeur(int valeur) {
+        this.valeur = valeur;
     }
-
 }
