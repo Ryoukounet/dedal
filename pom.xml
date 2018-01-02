@@ -8,7 +8,6 @@
     <artifactId>lancer</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
     <dependencies>
         <dependency>
             <groupId>com.oracle</groupId>
@@ -21,13 +20,7 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.2.7.Final</version>
-
         </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.9.0</version>
-         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -43,11 +36,14 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>6.0.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.1.4</version>
+        </dependency>
     </dependencies>
     <build>
-
         <resources>
-
             <resource>
                 <directory>src/main/resources</directory>
                 <targetPath>resources</targetPath>
@@ -58,9 +54,7 @@
                     <include>**/*.fxml</include>
                     <include>**/*.xml</include>
                 </includes>
-
             </resource>
-
         </resources>
         <plugins>
             <plugin>
@@ -72,7 +66,5 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
-
 </project>
