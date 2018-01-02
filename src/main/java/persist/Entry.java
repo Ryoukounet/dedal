@@ -1,20 +1,13 @@
-package core;
+package persist;
 
-import java.util.Observable;
-
-public class Player extends Observable {
+public class Entry {
 
     private String name;
     private int score;
 
-    public Player(String name, int score) {
+    public Entry(String name, int score) {
         this.name = name;
         this.score = score;
-    }
-
-    public void display() {
-        this.setChanged();
-        this.notifyObservers();
     }
 
     public String getName() {
@@ -32,5 +25,4 @@ public class Player extends Observable {
     public void setScore(int score) {
         this.score = score;
     }
-
 }
