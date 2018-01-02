@@ -21,14 +21,19 @@ public class Dice extends Observable implements Runnable {
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
     private final DoubleProperty angleZ = new SimpleDoubleProperty(0);
-
+    private double heightTerrain, widthTerrain;
     private MeshView cube = new MeshView();
+    private float width, height;
 
-    public Dice(float width, float height, float depth){
+    public Dice(float width, float height, float depth,double heightTerrain, double widthTerrain){
         PhongMaterial diceMaterial = new PhongMaterial();
         Image image = new Image(getClass().getResourceAsStream("../resources/dice.jpg"));
         diceMaterial.setDiffuseMap(image);
 
+        this.width = width;
+        this.height = height;
+        this.widthTerrain = widthTerrain;
+        this.heightTerrain = heightTerrain;
 
         TriangleMesh mesh = new TriangleMesh();
 
@@ -108,26 +113,36 @@ public class Dice extends Observable implements Runnable {
     public void run(){
 
         int i = 0;
-        float x = 5;
-        float y = 5;
-        float deltaX = 5;
-        float deltaY = 5;
+        double x = cube.getLayoutX();
+        double y = cube.getLayoutY();
+        float deltaAngleX = 5;
+        float deltaAngleY = 5;
+        System.out.println(x + "    " + y);
 
-        while(deltaX > 0 && deltaY > 0) {
+        while(deltaAngleX != 0 && deltaAngleY != 0) {
 
-            angleY.set(angleY.floatValue() - deltaX);
-           // this.setLayoutX(x = x + deltaX);
+            angleY.set(angleY.floatValue() - deltaAngleX);
+            if(Math.abs(angleY.floatValue()) > 360)
+                angleY.set(0);
 
-            angleX.set(angleX.floatValue() + deltaY);
-           // this.setLayoutY(y = y + deltaY);
+            if(x < (widthTerrain - width + 30) && x > width )
+                this.cube.setLayoutX(x = x + deltaAngleX);
+
+            angleX.set(angleX.floatValue() + deltaAngleY);
+            if(Math.abs(angleX.floatValue()) > 360)
+                angleX.set(0);
+
+            if(y < (heightTerrain - 40) && y > height)
+                this.cube.setLayoutY(y = y + deltaAngleY);
+           // System.out.println("angle x :" + angleX.floatValue() + " angle Y :" + angleY.floatValue() );
             i++;
-           /* if((i % 20) == 0){
-                if(deltaX > 0)
-                deltaX = deltaX - 1;
-                if(deltaY > 0)
-                deltaY = deltaY - 1;
+            if((i % 60) == 0){
+                if(deltaAngleX > 0)
+                    deltaAngleX = deltaAngleX - 1;
+                if(deltaAngleY > 0)
+                    deltaAngleY = deltaAngleY - 1;
 
-            }*/
+            }
             try {
                 Thread.sleep(50);
                 this.notifyObservers();
