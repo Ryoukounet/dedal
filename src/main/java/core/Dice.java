@@ -1,6 +1,7 @@
 package core;
 
 
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point3D;
@@ -13,6 +14,8 @@ import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import java.util.Observable;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Dice extends Observable implements Runnable {
 
@@ -24,6 +27,12 @@ public class Dice extends Observable implements Runnable {
     private double heightTerrain, widthTerrain;
     private MeshView cube = new MeshView();
     private float width, height;
+
+    int i = 0;
+    double x ;//= cube.getLayoutX();
+    double y ;//= cube.getLayoutY();
+    float deltaAngleX = -5;
+    float deltaAngleY = -5;
 
     public Dice(float width, float height, float depth,double heightTerrain, double widthTerrain){
         PhongMaterial diceMaterial = new PhongMaterial();
@@ -110,51 +119,162 @@ public class Dice extends Observable implements Runnable {
 
 
     }
+    private int absAngle( double angle ){
+        if(angle < 0)
+            angle = 360 + angle;
+
+        if(Math.abs(angle) == 360)
+            return 0;
+
+
+
+        return (int)angle;
+    }
+
+    private int getFace(){
+        int absX = absAngle(angleX.floatValue());
+        int absY = absAngle(angleY.floatValue());
+        //System.out.println(absX);
+        int ret = -1;
+        switch (absX) {
+            case 0:
+                switch (absY) {
+                    case 0:
+                        ret = 1;
+                        break;
+                    case 90:
+                        ret = 3;
+                        break;
+                    case 180:
+                        ret = 6;
+                        break;
+                    case 270:
+                        ret = 4;
+                        break;
+                }
+                break;
+
+            case 90:
+                ret = 2;
+                break;
+
+            case 180:
+                switch (absY) {
+                    case 0:
+                        ret = 6;
+                        break;
+                    case 90:
+                        ret = 4;
+                        break;
+                    case 180:
+                        ret = 1;
+                        break;
+                    case 270:
+                        ret = 3;
+                        break;
+                }
+                break;
+            case 270:
+                ret = 5;
+                break;
+        }
+        return ret;
+    }
+    public void roll(){
+        Thread test = new Thread(this);
+        test.start();
+    }
+
     public void run(){
 
-        int i = 0;
-        double x = cube.getLayoutX();
-        double y = cube.getLayoutY();
-        float deltaAngleX = 5;
-        float deltaAngleY = 5;
-        System.out.println(x + "    " + y);
+        x = cube.getLayoutX();
+        y = cube.getLayoutY();
 
-        while(deltaAngleX != 0 && deltaAngleY != 0) {
 
-            angleY.set(angleY.floatValue() - deltaAngleX);
-            if(Math.abs(angleY.floatValue()) > 360)
-                angleY.set(0);
+        while(Math.abs(deltaAngleX) > 1 && Math.abs(deltaAngleY) > 1) {
 
-            if(x < (widthTerrain - width + 30) && x > width )
-                this.cube.setLayoutX(x = x + deltaAngleX);
+            Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        angleY.set(angleY.floatValue() + deltaAngleX);
+                        if(Math.abs(angleY.floatValue()) > 360)
+                            angleY.set(0);
 
-            angleX.set(angleX.floatValue() + deltaAngleY);
-            if(Math.abs(angleX.floatValue()) > 360)
-                angleX.set(0);
+                        //collision du terrain sur l'axe X
+                        if(x < (widthTerrain - width + 30) && x > width )
+                            cube.setLayoutX(x = x + deltaAngleX);
+                        else {
+                            deltaAngleX = deltaAngleX * (-1);
+                            cube.setLayoutX(x = x + deltaAngleX);
+                        }
 
-            if(y < (heightTerrain - 40) && y > height)
-                this.cube.setLayoutY(y = y + deltaAngleY);
-           // System.out.println("angle x :" + angleX.floatValue() + " angle Y :" + angleY.floatValue() );
+                        angleX.set(angleX.floatValue() + deltaAngleY);
+                        if(Math.abs(angleX.floatValue()) > 360)
+                            angleX.set(0);
+
+                        //collision du terrain sur l'axe Y
+                        if(y < (heightTerrain - 40) && y > height)
+                            cube.setLayoutY(y = y + deltaAngleY);
+                        else {
+                            deltaAngleY = deltaAngleY * (-1);
+                            cube.setLayoutY(y = y + deltaAngleY);
+                }
+
+            }
+            });
             i++;
-            if((i % 60) == 0){
+            if((i % 30) == 0){
                 if(deltaAngleX > 0)
                     deltaAngleX = deltaAngleX - 1;
+                else
+                    deltaAngleX = deltaAngleX + 1;
+
                 if(deltaAngleY > 0)
                     deltaAngleY = deltaAngleY - 1;
+                else
+                    deltaAngleY = deltaAngleY + 1;
 
             }
+
+
             try {
-                Thread.sleep(50);
+
                 this.notifyObservers();
+                Thread.sleep(50);
             }
             catch (InterruptedException ex){
-
-            }catch (Exception ex){
 
             }
 
 
         }
+        final double AdjustmentAngleX = (angleX.floatValue() % 90 ) / 4;
+        final double AdjustmentAngleY = (angleY.floatValue() % 90) / 4;
+
+        for (int j = 0; j < 4; j++) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                angleX.set(angleX.floatValue() - AdjustmentAngleX);
+
+                angleY.set(angleY.floatValue() - AdjustmentAngleY);
+                }
+            });
+            try {
+                Thread.sleep(50);
+
+                this.notifyObservers();
+            }
+            catch (InterruptedException ex){
+
+            }
+        }
+
+
+      //  System.out.println(angleX.floatValue() + "    " + angleY.floatValue());
+      //  System.out.println(getFace( ));
+
+
     }
 
     public MeshView getCube() {
