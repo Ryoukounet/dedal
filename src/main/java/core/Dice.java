@@ -272,7 +272,8 @@ public class Dice extends Observable implements Runnable {
 
 
       //  System.out.println(angleX.floatValue() + "    " + angleY.floatValue());
-      //  System.out.println(getFace( ));
+        System.out.println(getFace( ));
+        Thread.yield();
 
 
     }
