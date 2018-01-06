@@ -14,11 +14,7 @@ import java.awt.*;
 
 public class IHM extends Application {
 
-
-
-
-
-
+    DiceGame game;
 
     @Override
     public void start(Stage stage) {
@@ -44,22 +40,15 @@ public class IHM extends Application {
 
     @FXML
     private void startg(ActionEvent event){
-        if(DiceGame.dice != null && DiceGame.dice2 != null) {
-            DiceGame.dices.getChildren().remove(DiceGame.dice.getCube());
-            DiceGame.dices.getChildren().remove(DiceGame.dice2.getCube());
-        }
-        DiceGame.dice =  new Dice(50, 50, 50,457,1070);
-        DiceGame.dice2 =  new Dice(50, 50, 50,457,1070);
-        DiceGame.dice.getCube().setLayoutX(450);
-        DiceGame.dice.getCube().setLayoutY(200);
-        DiceGame.dice.getCube().setTranslateZ(0);
+            if(game == null || !game.isOver()){
+                game = new DiceGame();
+                game.start();
+            }
 
-        DiceGame.dice2.getCube().setLayoutX(250);
-        DiceGame.dice2.getCube().setLayoutY(250);
-        DiceGame.dice2.getCube().setTranslateZ(0);
-        DiceGame.dices.getChildren().addAll(DiceGame.dice.getCube(), DiceGame.dice2.getCube());
-        DiceGame.dice.roll();
-        DiceGame.dice2.roll();
+            //DiceGame.dice = new Dice(50, 50, 50, 457, 1070);
+           // DiceGame.dice2 = new Dice(50, 50, 50, 457, 1070);
+
+
     }
 
     public static void main(String[] args) {

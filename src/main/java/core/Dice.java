@@ -13,6 +13,8 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+import utils.Randomizer;
+
 import java.util.Observable;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,7 @@ public class Dice extends Observable implements Runnable {
     private MeshView cube = new MeshView();
     private float width, height;
 
+    private boolean roll = false;
     int i = 0;
     double x ;//= cube.getLayoutX();
     double y ;//= cube.getLayoutY();
@@ -189,7 +192,11 @@ public class Dice extends Observable implements Runnable {
 
         x = cube.getLayoutX();
         y = cube.getLayoutY();
+        int randX = Randomizer.getInstance().getValue();
+        int randY = Randomizer.getInstance().getValue();
+        setValue(randX,randY);
 
+        roll = true;
 
         while(Math.abs(deltaAngleX) > 1 && Math.abs(deltaAngleY) > 1) {
 
@@ -271,8 +278,9 @@ public class Dice extends Observable implements Runnable {
         }
 
 
-      //  System.out.println(angleX.floatValue() + "    " + angleY.floatValue());
+
         System.out.println(getFace( ));
+        roll = false;
         Thread.yield();
 
 
@@ -282,4 +290,12 @@ public class Dice extends Observable implements Runnable {
         return cube;
     }
 
+    public boolean isRoll() {
+        return roll;
+    }
+    public void setValue(float x, float y){
+        deltaAngleX = x;
+        deltaAngleY = y;
+
+    }
 }
