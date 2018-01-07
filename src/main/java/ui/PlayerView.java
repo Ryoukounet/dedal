@@ -9,7 +9,11 @@ public class PlayerView implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+
         Player p = (Player) o;
     }
 
+    public void goToGame(){
+
+    }
 }

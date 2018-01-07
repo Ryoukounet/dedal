@@ -4,10 +4,10 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 
-
- class DiceGame {
+class DiceGame {
      static Group root;
      static Scene scene;
      private static final float EDGE_LENGTH = 50;
@@ -17,6 +17,7 @@ import javafx.scene.Scene;
      private Dice dice2;
      static Group dices = new Group();
      static Parent par;
+     static Stage stage;
 
 
      void start(){

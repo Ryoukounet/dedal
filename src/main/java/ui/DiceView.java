@@ -2,10 +2,14 @@ package ui;
 
 import core.Dice;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
@@ -18,9 +22,11 @@ public class DiceView implements Observer,Runnable {
     private int i = 1;
     private Label label;
     private int oldScore;
+    public static Stage stage;
 
     public DiceView(Label label){
         this.label = label;
+
     }
     @Override
     public synchronized void update(Observable o, Object arg) {
@@ -34,7 +40,7 @@ public class DiceView implements Observer,Runnable {
 
     public void run(){
         oldScore = 0;
-        while (dices.size() < 20) {
+        while (dices.size() < 2) {
 
             try {
 
@@ -56,6 +62,33 @@ public class DiceView implements Observer,Runnable {
                 e.printStackTrace();
             }
         }
+        FXMLLoader myLoader = new FXMLLoader(getClass().getResource("../resources/PlayerView.fxml"));
+
+
+            Platform.runLater(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      try {
+                                      Parent loadScreen = (Parent) myLoader.load(); Scene scene = stage.getScene();
+
+                                          scene = new Scene(loadScreen, 650, 150);
+                                          //scene.getStylesheets().add(App.class.getResource("demo.css").toExternalForm());
+                                          stage.setScene(scene);
+
+                                          stage.getScene().setRoot(loadScreen);
+                                      } catch (IOException e) {
+                                          e.printStackTrace();
+                                      }
+
+
+
+                                  }
+                              }
+            );
+
+
+
+
     }
 
     public int getScores(){

@@ -21,6 +21,7 @@ public class IHM extends Application {
 
     DiceGame game;
     static DiceView diceView;
+    Stage stage;
 
     @Override
     public void start(Stage stage) {
@@ -39,6 +40,8 @@ public class IHM extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.stage = stage;
+        DiceView.stage = stage;
         //diceView = new DiceView(score);
         DiceGame.root.getChildren().addAll(DiceGame.dices);
 
@@ -48,7 +51,7 @@ public class IHM extends Application {
     @FXML
     private void start(ActionEvent event){
             if(diceView == null) {
-                //System.out.println("jjjj");
+
                 diceView = new DiceView(score);
                 Thread view = new Thread(diceView);
                 view.start();
