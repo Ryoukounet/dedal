@@ -7,14 +7,20 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import ui.DiceView;
 
 import java.awt.*;
 
 public class IHM extends Application {
 
+    @FXML
+    public Label score;
+
     DiceGame game;
+    static DiceView diceView;
 
     @Override
     public void start(Stage stage) {
@@ -33,22 +39,24 @@ public class IHM extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //diceView = new DiceView(score);
         DiceGame.root.getChildren().addAll(DiceGame.dices);
 
 
     }
 
     @FXML
-    private void startg(ActionEvent event){
+    private void start(ActionEvent event){
+            if(diceView == null) {
+                //System.out.println("jjjj");
+                diceView = new DiceView(score);
+                Thread view = new Thread(diceView);
+                view.start();
+            }
             if(game == null || !game.isOver()){
                 game = new DiceGame();
                 game.start();
             }
-
-            //DiceGame.dice = new Dice(50, 50, 50, 457, 1070);
-           // DiceGame.dice2 = new Dice(50, 50, 50, 457, 1070);
-
-
     }
 
     public static void main(String[] args) {

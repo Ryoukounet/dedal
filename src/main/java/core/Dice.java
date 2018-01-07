@@ -15,11 +15,15 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import utils.Randomizer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Dice extends Observable implements Runnable {
+    private List<Observer> observers = new ArrayList<Observer>();
 
     private Rotate axeX,axeY, axeZ;
 
@@ -134,7 +138,7 @@ public class Dice extends Observable implements Runnable {
         return (int)angle;
     }
 
-    private int getFace(){
+    public int getFace(){
         int absX = absAngle(angleX.floatValue());
         int absY = absAngle(angleY.floatValue());
         //System.out.println(absX);
@@ -245,8 +249,6 @@ public class Dice extends Observable implements Runnable {
 
 
             try {
-
-                this.notifyObservers();
                 Thread.sleep(50);
             }
             catch (InterruptedException ex){
@@ -269,8 +271,6 @@ public class Dice extends Observable implements Runnable {
             });
             try {
                 Thread.sleep(50);
-
-                this.notifyObservers();
             }
             catch (InterruptedException ex){
 
@@ -280,9 +280,11 @@ public class Dice extends Observable implements Runnable {
 
 
         System.out.println(getFace( ));
+        //obligatoire pour que la notification fasse effet
+        setChanged();
+        this.notifyObservers();
         roll = false;
         Thread.yield();
-
 
     }
 
