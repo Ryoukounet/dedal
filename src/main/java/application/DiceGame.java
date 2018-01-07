@@ -1,5 +1,9 @@
+package application;
+
 import core.Dice;
+import core.Player;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
@@ -7,18 +11,44 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-class DiceGame {
+public class DiceGame {
+    //pour l'affichage
      static Group root;
-     static Scene scene;
-     private static final float EDGE_LENGTH = 50;
-
-     static PerspectiveCamera camera = new PerspectiveCamera(false);
-     private Dice dice1 ;
-     private Dice dice2;
+     public static Scene scene;
      static Group dices = new Group();
      static Parent par;
-     static Stage stage;
+     static PerspectiveCamera camera;
 
+     private Stage stage;
+     private Dice dice1 ;
+     private Dice dice2;
+     public static Player player;
+
+
+
+    public DiceGame(){
+        this.player = new Player("unnamed",0);
+
+    }
+
+    public void gameInitialize(){
+        try {
+            stage = IHM.stage;
+            par =  FXMLLoader.load(getClass().getResource("../resources/Accueil.fxml"));
+            root = new Group(par);
+            scene = new Scene(root);
+
+            camera = new PerspectiveCamera(false);
+            scene.setCamera(camera);
+            stage.setTitle("Dedal");
+            stage.setScene(DiceGame.scene);
+            root.getChildren().addAll(DiceGame.dices);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
      void start(){
         if(!isOver()) {
@@ -47,7 +77,6 @@ class DiceGame {
     }
 
      private void clearMap(){
-
         dices.getChildren().removeAll(dices.getChildren());
     }
 }

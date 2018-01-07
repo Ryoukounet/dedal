@@ -1,14 +1,19 @@
 package persist;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Entry {
 
+    @Id
+    @GeneratedValue
+    private long id;
     private String name;
     private int score;
 
-    public Entry(String name, int score) {
-        this.name = name;
-        this.score = score;
-    }
+
 
     public String getName() {
         return name;

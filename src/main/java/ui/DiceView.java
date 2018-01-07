@@ -1,6 +1,9 @@
 package ui;
 
+import application.DiceGame;
+import application.IHM;
 import core.Dice;
+import core.Player;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,11 +24,14 @@ public class DiceView implements Observer,Runnable {
     private HashMap<Integer,Dice> dices = new HashMap<>();
     private int i = 1;
     private Label label;
+    private Label labelLancer;
     private int oldScore;
+    private int oldLancer;
     public static Stage stage;
 
-    public DiceView(Label label){
+    public DiceView(Label label, Label labelLancer){
         this.label = label;
+        this.labelLancer = labelLancer;
 
     }
     @Override
@@ -40,18 +46,31 @@ public class DiceView implements Observer,Runnable {
 
     public void run(){
         oldScore = 0;
-        while (dices.size() < 2) {
+        oldLancer = 10;
+        while (dices.size() < 20) {
 
             try {
 
                 if(oldScore != getScores()) {
-
+                    Platform.runLater(new Runnable() {
+                      @Override
+                      public void run() {
+                          int score = getScores();
+                          label.setText("Score : " + score);
+                          oldScore = score;
+                      }
+                  }
+                );
+                }
+                int nbLancer = 10 - (dices.size() / 2);
+                if(oldLancer != nbLancer) {
                     Platform.runLater(new Runnable() {
                                           @Override
                                           public void run() {
-                                              int score = getScores();
-                                              label.setText("Score : " + score);
-                                              oldScore = score;
+
+                                              // System.out.println(dices.size());
+                                              labelLancer.setText("Lancés restant : " + nbLancer);
+                                              oldLancer = nbLancer;
                                           }
                                       }
                     );
@@ -65,25 +84,34 @@ public class DiceView implements Observer,Runnable {
         FXMLLoader myLoader = new FXMLLoader(getClass().getResource("../resources/PlayerView.fxml"));
 
 
-            Platform.runLater(new Runnable() {
-                                  @Override
-                                  public void run() {
-                                      try {
-                                      Parent loadScreen = (Parent) myLoader.load(); Scene scene = stage.getScene();
+        Platform.runLater(new Runnable() {
+                              @Override
+                              public void run() {
+                                  try {
+                                    Parent loadScreen = (Parent) myLoader.load();
+                                      Scene scene;
 
-                                          scene = new Scene(loadScreen, 650, 150);
-                                          //scene.getStylesheets().add(App.class.getResource("demo.css").toExternalForm());
-                                          stage.setScene(scene);
+                                      scene = new Scene(loadScreen, 650, 150);
 
-                                          stage.getScene().setRoot(loadScreen);
-                                      } catch (IOException e) {
-                                          e.printStackTrace();
-                                      }
+                                      stage.setScene(scene);
+                                      stage.getScene().setRoot(loadScreen);
 
+                                      PlayerView.stage = stage;
+                                      Player player = DiceGame.player;
+                                      player.addObserver(myLoader.getController());
 
+                                      IHM.game = null;
+                                      IHM.diceView = null;
+                                      dices.clear();
+                                      player.setScore(getScores());
+                                      player.display();
 
+                                  } catch (IOException e) {
+                                      e.printStackTrace();
                                   }
+
                               }
+                          }
             );
 
 
@@ -91,7 +119,7 @@ public class DiceView implements Observer,Runnable {
 
     }
 
-    public int getScores(){
+     int getScores(){
         int j = 1;
         int score = 0;
         while(j < dices.size()){
@@ -99,6 +127,7 @@ public class DiceView implements Observer,Runnable {
              Dice deux = dices.get(j + 1);
              j += 2;
              if( un !=null && deux != null){
+
                  int totalFaces = un.getFace() + deux.getFace();
                  if(totalFaces == 7){
                      score += 10;

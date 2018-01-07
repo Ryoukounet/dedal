@@ -122,9 +122,6 @@ public class Dice extends Observable implements Runnable {
         axeY.angleProperty().bind(angleY);
         axeZ.angleProperty().bind(angleZ);
 
-
-
-
     }
     private int absAngle( double angle ){
         if(angle < 0)

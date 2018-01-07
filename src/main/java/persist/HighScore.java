@@ -17,16 +17,18 @@ public abstract class HighScore {
     public abstract void save(Entry e);
 
     public void add(String name, int score) {
-        Entry entry = new Entry(name, score);
+        Entry entry = new Entry();
+        entry.setName(name);
+        entry.setScore(score);
         this.entries.add(entry);
         this.save(entry);
     }
 
     protected void addEntry(String name, int score) {
-        Query query = entityManager.createNativeQuery("INSERT INTO Entry (name, score) VALUES(?,?)");
-        query.setParameter(1, name);
-        query.setParameter(2, score);
-        query.executeUpdate();
+        Entry entry = new Entry();
+        entry.setName(name);
+        entry.setScore(score);
+        entityManager.persist(entry);
     }
 
     public Set<Entry> getEntries() {

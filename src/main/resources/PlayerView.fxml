@@ -9,8 +9,8 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.85" prefHeight="149.0" prefWidth="631.0" style="-fx-background-color: #2E9AFE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.PlayerView">
    <children>
       <Button layoutX="334.0" layoutY="90.0" mnemonicParsing="false" text="Sauvegarder" onAction="#goToGame" />
-      <TextField layoutX="90.0" layoutY="50.0" prefHeight="25.0" prefWidth="504.0" />
-      <Label layoutX="293.0" layoutY="7.0" text="Score : 0">
+      <TextField fx:id="name" layoutX="90.0" layoutY="50.0" prefHeight="25.0" prefWidth="504.0" />
+      <Label fx:id="score" layoutX="293.0" layoutY="7.0" text="Score : 0">
          <font>
             <Font size="18.0" />
          </font>
