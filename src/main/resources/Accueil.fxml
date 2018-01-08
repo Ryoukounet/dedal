@@ -9,11 +9,11 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.85" prefHeight="610.0" prefWidth="1085.0" style="-fx-background-color: #2E9AFE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.IHM">
    <children>
       <Button layoutX="901.0" layoutY="479.0" mnemonicParsing="false" onAction="#start" prefHeight="39.0" prefWidth="163.0" style="-fx-background-color: #2E64FE;" text="Lancer" />
-      <Button layoutX="901.0" layoutY="530.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="115.0" style="-fx-background-color: #2E64FE;" text="Scores" />
+      <Button layoutX="901.0" layoutY="530.0" mnemonicParsing="false" onAction="#goToScore" prefHeight="39.0" prefWidth="115.0" style="-fx-background-color: #2E64FE;" text="Scores" />
       <Label layoutX="34.0" layoutY="536.0" text="Copyright Milev Mallinger" />
       <Button layoutX="1031.0" layoutY="530.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="20.0" style="-fx-background-color: #2E64FE;" text="?" />
       <Pane layoutX="7.0" layoutY="9.0" prefHeight="457.0" prefWidth="1070.0" style="-fx-background-color: #81BEF7;" />
-      <Label fx:id="score" layoutX="34.0" layoutY="490.0" text="Score : 0">
+      <Label fx:id="score" layoutX="34.0" layoutY="490.0" text="Score : 0" >
          <font>
             <Font size="24.0" />
          </font>

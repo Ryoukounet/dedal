@@ -37,7 +37,7 @@ public class PlayerView implements Observer {
 
     public void goToGame(){
 
-        if(name.getText() != "")
+        if(!name.getText().trim().equals(""))
             player.setName(name.getText());
         PersistKit pk;
         HighScore highScore;

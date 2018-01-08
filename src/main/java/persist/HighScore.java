@@ -2,6 +2,8 @@ package persist;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,9 +33,7 @@ public abstract class HighScore {
         entityManager.persist(entry);
     }
 
-    public Set<Entry> getEntries() {
-        return entries;
-    }
+    public abstract ArrayList<Entry> getEntries();
 
     public void setEntries(Set<Entry> entries) {
         this.entries = entries;

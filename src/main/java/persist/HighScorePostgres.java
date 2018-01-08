@@ -2,6 +2,7 @@ package persist;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 
 public class HighScorePostgres extends HighScore {
 
@@ -14,6 +15,11 @@ public class HighScorePostgres extends HighScore {
         entityManager.getTransaction().commit();
         entityManager.close();
         factory.close();
+    }
+
+    @Override
+    public ArrayList<Entry> getEntries() {
+        return null;
     }
 
 }
