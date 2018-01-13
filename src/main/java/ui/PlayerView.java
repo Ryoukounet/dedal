@@ -69,6 +69,7 @@ public class PlayerView implements Observer {
                   stage.getScene().setRoot(loadScreen);
                   DiceGame game = new DiceGame();
                   game.gameInitialize();
+                  IHM.game =game;
 
 
 

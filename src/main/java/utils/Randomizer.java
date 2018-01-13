@@ -17,6 +17,6 @@ public class Randomizer {
     public synchronized int  getValue() {
         int upper = 10;
         int lower = -10;
-        return (int) (Math.random() * (upper - lower)) + lower;
+        return (int) ((Math.random()) * (upper - lower)) + lower;
     }
 }

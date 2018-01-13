@@ -47,7 +47,7 @@ public class DiceView implements Observer,Runnable {
     public void run(){
         oldScore = 0;
         oldLancer = 10;
-        while (dices.size() < 20) {
+        while (!allRollOver()) {
 
             try {
 
@@ -85,38 +85,52 @@ public class DiceView implements Observer,Runnable {
 
 
         Platform.runLater(new Runnable() {
-                              @Override
-                              public void run() {
-                                  try {
-                                    Parent loadScreen = (Parent) myLoader.load();
-                                      Scene scene;
+                  @Override
+                  public void run() {
+                      try {
+                        Parent loadScreen = (Parent) myLoader.load();
+                          Scene scene;
 
-                                      scene = new Scene(loadScreen, 650, 150);
+                          scene = new Scene(loadScreen, 650, 150);
 
-                                      stage.setScene(scene);
-                                      stage.getScene().setRoot(loadScreen);
+                          stage.setScene(scene);
+                          stage.getScene().setRoot(loadScreen);
 
-                                      PlayerView.stage = stage;
-                                      Player player = DiceGame.player;
-                                      player.addObserver(myLoader.getController());
+                          PlayerView.stage = stage;
+                          Player player = DiceGame.player;
+                          player.addObserver(myLoader.getController());
 
-                                      IHM.game = null;
-                                      IHM.diceView = null;
-                                      dices.clear();
-                                      player.setScore(getScores());
-                                      player.display();
+                          IHM.game = null;
+                          IHM.diceView = null;
+                          dices.clear();
+                          player.setScore(getScores());
+                          player.display();
 
-                                  } catch (IOException e) {
-                                      e.printStackTrace();
-                                  }
+                      } catch (IOException e) {
+                          e.printStackTrace();
+                      }
 
-                              }
-                          }
+                  }
+              }
             );
 
 
 
 
+    }
+    boolean allRollOver(){
+        boolean roll = false;
+        if(dices.size() >= 4) {
+            roll = true;
+            for (Dice value : dices.values()) {
+                if (value.isRoll()) {
+                    roll = false;
+                    break;
+                }
+
+            }
+        }
+        return roll;
     }
 
      int getScores(){

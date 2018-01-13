@@ -48,13 +48,12 @@ public class IHM  extends Application {
     @FXML
     private void start(ActionEvent event){
             if(diceView == null) {
-                System.out.println("coucou");
+
                 diceView = new DiceView(score,lancer);
                 Thread view = new Thread(diceView);
                 view.start();
             }
             if(game == null || !game.isOver()){
-                game = new DiceGame();
                 game.start();
             }
     }
@@ -63,13 +62,16 @@ public class IHM  extends Application {
     private void goToScore(ActionEvent event) throws IOException {
         FXMLLoader myLoader = new FXMLLoader(getClass().getResource("../resources/ScoreView.fxml"));
 
+
         Parent loadScreen = (Parent) myLoader.load();
         Scene scene;
 
         scene = new Scene(loadScreen, 630, 350);
+        Stage newStage = new Stage();
 
-        stage.setScene(scene);
-        stage.getScene().setRoot(loadScreen);
+        newStage.setScene(scene);
+        newStage.getScene().setRoot(loadScreen);
+        newStage.show();
     }
     public static void main(String[] args) {
         launch(args);

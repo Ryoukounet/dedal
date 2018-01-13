@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import ui.CubeView;
 
 
 public class DiceGame {
@@ -23,12 +24,13 @@ public class DiceGame {
      private Dice dice1 ;
      private Dice dice2;
      public static Player player;
+     int nbLancer;
 
 
 
     public DiceGame(){
-        this.player = new Player("unnamed",0);
-
+        player = new Player("unnamed",0);
+        nbLancer = 10;
     }
 
     public void gameInitialize(){
@@ -53,20 +55,14 @@ public class DiceGame {
      void start(){
         if(!isOver()) {
             clearMap();
-            dice1 = new Dice(50, 50, 50, 457, 1070);
-            dice2 = new Dice(50, 50, 50, 457, 1070);
+            dice1 = new Dice(new CubeView(), 450 , 200);
+            dice2 = new Dice(new CubeView(), 250, 250);
             dice1.addObserver(IHM.diceView);
             dice2.addObserver(IHM.diceView);
-            dice1.getCube().setLayoutX(450);
-            dice1.getCube().setLayoutY(200);
-            dice1.getCube().setTranslateZ(0);
-
-            dice2.getCube().setLayoutX(250);
-            dice2.getCube().setLayoutY(250);
-            dice2.getCube().setTranslateZ(0);
-            dices.getChildren().addAll(dice1.getCube(), dice2.getCube());
+            dices.getChildren().addAll(dice1.getCube().getMesh(), dice2.getCube().getMesh());
             dice1.roll();
             dice2.roll();
+            nbLancer--;
         }
     }
 
