@@ -120,7 +120,7 @@ public class DiceView implements Observer,Runnable {
     }
     boolean allRollOver(){
         boolean roll = false;
-        if(dices.size() >= 4) {
+        if(dices.size() >= 20) {
             roll = true;
             for (Dice value : dices.values()) {
                 if (value.isRoll()) {

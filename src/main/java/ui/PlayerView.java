@@ -49,6 +49,9 @@ public class PlayerView implements Observer {
         highScore.save(entry);
         redirect();
     }
+    public void goToGameCancel(){
+        redirect();
+    }
 
     public void redirect(){
         FXMLLoader myLoader = new FXMLLoader(getClass().getResource("../resources/Accueil.fxml"));

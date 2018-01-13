@@ -8,14 +8,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.85" prefHeight="149.0" prefWidth="631.0" style="-fx-background-color: #2E9AFE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.PlayerView">
    <children>
-      <Button layoutX="334.0" layoutY="90.0" mnemonicParsing="false" text="Sauvegarder" onAction="#goToGame" />
-      <TextField fx:id="name" layoutX="90.0" layoutY="50.0" prefHeight="25.0" prefWidth="504.0" />
+      <Button layoutX="334.0" layoutY="90.0" mnemonicParsing="false" text="Sauvegarder" style="-fx-background-color: #2E64FE;" onAction="#goToGame" />
+      <TextField fx:id="name" layoutX="90.0" layoutY="50.0" prefHeight="25.0" prefWidth="504.0" onAction="#goToGameCancel" />
       <Label fx:id="score" layoutX="293.0" layoutY="7.0" text="Score : 0">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <Label layoutX="31.0" layoutY="54.0" text="Pseudo" />
-      <Button layoutX="233.0" layoutY="90.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" text="Annuler" />
+      <Button layoutX="233.0" layoutY="90.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" style="-fx-background-color: #2E64FE;" text="Annuler" />
    </children>
 </AnchorPane>

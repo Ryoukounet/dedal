@@ -15,8 +15,16 @@ public class Randomizer {
     }
 
     public synchronized int  getValue() {
-        int upper = 10;
-        int lower = -10;
-        return (int) ((Math.random()) * (upper - lower)) + lower;
+        int upper = 8;
+        int lower = -8;
+
+        int res =  Math.toIntExact(Math.round(((Math.random() ) )  * (upper - lower) + lower));
+
+        if(res >= 0)
+            res += 2;
+        else
+            res -=2;
+
+        return res;
     }
 }

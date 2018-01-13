@@ -124,48 +124,21 @@ public class Dice extends Observable implements Runnable {
 
         x = cube.getMesh().getLayoutX();
         y = cube.getMesh().getLayoutY();
-        int randX = Randomizer.getInstance().getValue();
-        int randY = Randomizer.getInstance().getValue();
-        setValue(randX,randY);
+
+        int deceleration = 40;
+
+        setValue(Randomizer.getInstance().getValue());
 
         roll = true;
 
+
         while(Math.abs(deltaAngleX) > 1 && Math.abs(deltaAngleY) > 1) {
-                angleY.set(angleY.floatValue() + deltaAngleX);
-                if(Math.abs(angleY.floatValue()) > 360)
-                    angleY.set(0);
-
-                //collision du terrain sur l'axe X
-                if(x < (widthTerrain - width + 30) && x > width )
-                   x = x + deltaAngleX;
-                else {
-                    deltaAngleX = deltaAngleX * (-1);
-                    x = x + deltaAngleX;
-                }
-                angleX.set(angleX.floatValue() + deltaAngleY);
-                if(Math.abs(angleX.floatValue()) > 360)
-                    angleX.set(0);
-
-                //collision du terrain sur l'axe Y
-                if(y < (heightTerrain - 40) && y > height)
-                    y = y + deltaAngleY;
-                else {
-                    deltaAngleY = deltaAngleY * (-1);
-                    y = y + deltaAngleY;
-                }
+            rollOneStep();
 
             i++;
-            if((i % 30) == 0){
-                if(deltaAngleX > 0)
-                    deltaAngleX = deltaAngleX - 1;
-                else
-                    deltaAngleX = deltaAngleX + 1;
-
-                if(deltaAngleY > 0)
-                    deltaAngleY = deltaAngleY - 1;
-                else
-                    deltaAngleY = deltaAngleY + 1;
-
+            if((i % deceleration) == 0){
+                targetAngle();
+                deceleration -= 5;
             }
 
             try {
@@ -177,31 +150,78 @@ public class Dice extends Observable implements Runnable {
             catch (InterruptedException ex){
 
             }
-
-
         }
-        final double AdjustmentAngleX = (angleX.floatValue() % 90 ) / 4;
-        final double AdjustmentAngleY = (angleY.floatValue() % 90) / 4;
 
-        for (int j = 0; j < 4; j++) {
+        boolean finishX = false;
+        boolean finishY = false;
+        int finishDeltaX = angleX.floatValue() % 90 > 45 ? 5 : -5;
+        int finishDeltaY = angleY.floatValue() % 90 > 45  ? 5 : -5;
+        angleX.set(angleX.floatValue() - ( angleX.floatValue() % 5 ));
+        angleY.set(angleY.floatValue() - ( angleY.floatValue() % 5 ));
 
-            angleX.set(angleX.floatValue() - AdjustmentAngleX);
-            angleY.set(angleY.floatValue() - AdjustmentAngleY);
+        while (!finishX || !finishY){
+
+            if((angleX.floatValue() % 90) != 0 )
+                 angleX.set(angleX.floatValue() + finishDeltaX);
+            else
+                finishX = true;
+
+            if((angleY.floatValue() % 90) != 0 )
+                 angleY.set(angleY.floatValue() + finishDeltaY);
+            else
+                finishY = true;
 
             try {
                 Thread.sleep(50);
+                setChanged();
+                this.notifyObservers(cube);
             }
             catch (InterruptedException ex){
 
             }
         }
 
-        //obligatoire pour que la notification fasse effet
+
         setChanged();
         this.notifyObservers();
         roll = false;
-        Thread.yield();
 
+    }
+    private void rollOneStep(){
+        angleY.set(angleY.floatValue() + deltaAngleY);
+        if(Math.abs(angleY.floatValue()) > 360)
+            angleY.set(0);
+
+        //collision du terrain sur l'axe X
+        if(x < (widthTerrain - width + 30) && x > width )
+            x = x + deltaAngleX;
+        else {
+            deltaAngleX = deltaAngleX * (-1);
+            x = x + deltaAngleX;
+        }
+        angleX.set(angleX.floatValue() + deltaAngleX);
+        if(Math.abs(angleX.floatValue()) > 360)
+            angleX.set(0);
+
+        //collision du terrain sur l'axe Y
+        if(y < (heightTerrain - 40) && y > height)
+            y = y + deltaAngleY;
+        else {
+            deltaAngleY = deltaAngleY * (-1);
+            y = y + deltaAngleY;
+        }
+    }
+
+    private void targetAngle(){
+        if(deltaAngleX > 0)
+            deltaAngleX = deltaAngleX - 1;
+        else
+            deltaAngleX = deltaAngleX + 1;
+
+        if(deltaAngleY > 0)
+            deltaAngleY = deltaAngleY - 1;
+        else
+            deltaAngleY = deltaAngleY + 1;
     }
 
     public CubeView getCube() {
@@ -236,9 +256,10 @@ public class Dice extends Observable implements Runnable {
         return y;
     }
 
-    public void setValue(float x, float y){
-        deltaAngleX = x;
-        deltaAngleY = y;
+    private void setValue(int value){
+        int signX = Math.random() > 0.5 ? 1 : -1;
+        deltaAngleX = value * signX;
+        deltaAngleY = value;
 
     }
 
