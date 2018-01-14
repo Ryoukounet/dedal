@@ -136,6 +136,7 @@ public class Dice extends Observable implements Runnable {
             rollOneStep();
 
             i++;
+            deceleration = deceleration != 0 ? deceleration : 1;
             if((i % deceleration) == 0){
                 targetAngle();
                 deceleration -= 5;
