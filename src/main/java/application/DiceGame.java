@@ -42,7 +42,7 @@ public class DiceGame {
 
             camera = new PerspectiveCamera(false);
             scene.setCamera(camera);
-            stage.setTitle("Dedal");
+            stage.setTitle("DiceGame");
             stage.setScene(DiceGame.scene);
             root.getChildren().addAll(DiceGame.dices);
             stage.show();

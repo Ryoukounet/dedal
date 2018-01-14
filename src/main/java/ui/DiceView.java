@@ -98,13 +98,17 @@ public class DiceView implements Observer,Runnable {
 
                           PlayerView.stage = stage;
                           Player player = DiceGame.player;
+                          player.setScore(getScores());
+
+                         // player.se
+                         // player.notifyObservers();
                           player.addObserver(myLoader.getController());
+                          player.display();
 
                           IHM.game = null;
                           IHM.diceView = null;
                           dices.clear();
-                          player.setScore(getScores());
-                          player.display();
+
 
                       } catch (IOException e) {
                           e.printStackTrace();
