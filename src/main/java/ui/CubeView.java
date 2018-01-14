@@ -13,10 +13,10 @@ import javafx.scene.transform.Rotate;
 import java.util.Observable;
 import java.util.Observer;
 
-public class CubeView implements Observer{
+public class CubeView implements Observer {
     private float width, height;
 
-    private Rotate axeX,axeY, axeZ;
+    private Rotate axeX, axeY, axeZ;
     private MeshView cube = new MeshView();
 
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
@@ -25,7 +25,7 @@ public class CubeView implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
-        Dice dice = (Dice)o;
+        Dice dice = (Dice) o;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -35,12 +35,9 @@ public class CubeView implements Observer{
                 cube.setLayoutY(dice.getY());
             }
         });
-
-
-
     }
 
-    public CubeView(){
+    public CubeView() {
         PhongMaterial diceMaterial = new PhongMaterial();
         Image image = new Image(getClass().getResourceAsStream("../resources/dice.jpg"));
         diceMaterial.setDiffuseMap(image);
@@ -113,11 +110,11 @@ public class CubeView implements Observer{
         cube.getTransforms().setAll(
                 axeX = new Rotate(0, Rotate.X_AXIS),
                 axeY = new Rotate(0, Rotate.Y_AXIS)
-              //  axeZ = new Rotate(0, Rotate.Z_AXIS)
+                //  axeZ = new Rotate(0, Rotate.Z_AXIS)
         );
         axeX.angleProperty().bind(angleX);
         axeY.angleProperty().bind(angleY);
-      //  axeZ.angleProperty().bind(angleZ);
+        //  axeZ.angleProperty().bind(angleZ);
     }
 
     public MeshView getMesh() {

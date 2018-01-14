@@ -1,9 +1,7 @@
 package persist;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +32,8 @@ public abstract class HighScore {
     }
 
     public abstract ArrayList<Entry> getEntries();
+
+    public abstract ArrayList<Entry> getTenHighestEntries();
 
     public void setEntries(Set<Entry> entries) {
         this.entries = entries;

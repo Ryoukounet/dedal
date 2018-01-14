@@ -11,7 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import persist.*;
+import persist.Entry;
+import persist.HighScore;
+import persist.MysqlKit;
+import persist.PersistKit;
 
 import java.io.IOException;
 import java.util.Observable;
@@ -27,6 +30,7 @@ public class PlayerView implements Observer {
     public static Stage stage;
 
     private Player player;
+
     @Override
     public void update(Observable o, Object arg) {
 
@@ -35,9 +39,8 @@ public class PlayerView implements Observer {
 
     }
 
-    public void goToGame(){
-
-        if(!name.getText().trim().equals(""))
+    public void goToGame() {
+        if (!name.getText().trim().equals(""))
             player.setName(name.getText());
         PersistKit pk;
         HighScore highScore;
@@ -49,40 +52,34 @@ public class PlayerView implements Observer {
         highScore.save(entry);
         redirect();
     }
-    public void goToGameCancel(){
+
+    public void goToGameCancel() {
         redirect();
     }
 
-    public void redirect(){
+    public void redirect() {
         FXMLLoader myLoader = new FXMLLoader(getClass().getResource("../resources/Accueil.fxml"));
 
-
         Platform.runLater(new Runnable() {
-          @Override
-          public void run() {
-              try {
-                  Parent loadScreen = (Parent) myLoader.load();
-                  Scene scene;
+            @Override
+            public void run() {
+                try {
+                    Parent loadScreen = (Parent) myLoader.load();
+                    Scene scene;
 
-                  scene = new Scene(loadScreen, 650, 150);
+                    scene = new Scene(loadScreen, 650, 150);
 
-                  stage.setScene(scene);
-                  DiceGame.scene = scene;
+                    stage.setScene(scene);
+                    DiceGame.scene = scene;
 
-                  stage.getScene().setRoot(loadScreen);
-                  DiceGame game = new DiceGame();
-                  game.gameInitialize();
-                  IHM.game =game;
-
-
-
-              } catch (IOException e) {
-                  e.printStackTrace();
-              }
-
-
-
-          }
-      });
+                    stage.getScene().setRoot(loadScreen);
+                    DiceGame game = new DiceGame();
+                    game.gameInitialize();
+                    IHM.game = game;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

@@ -1,32 +1,18 @@
 package core;
 
 
-import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.Point3D;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 import ui.CubeView;
-import ui.DiceView;
 import utils.Randomizer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class Dice extends Observable implements Runnable {
     private List<Observer> observers = new ArrayList<Observer>();
-
 
 
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
@@ -35,8 +21,8 @@ public class Dice extends Observable implements Runnable {
 
     private boolean roll = false;
     int i = 0;
-    double x ;
-    double y ;
+    double x;
+    double y;
     float deltaAngleX = -5;
     float deltaAngleY = -5;
     private float width, height;
@@ -45,8 +31,8 @@ public class Dice extends Observable implements Runnable {
     CubeView cube; //observer
     private double heightTerrain, widthTerrain;
 
-    public Dice(CubeView cube, int layoutX, int layoutY){
-        this.widthTerrain = 1070 ;
+    public Dice(CubeView cube, int layoutX, int layoutY) {
+        this.widthTerrain = 1070;
         this.heightTerrain = 457;
         this.width = 50;
         this.height = 50;
@@ -56,17 +42,18 @@ public class Dice extends Observable implements Runnable {
         this.addObserver(cube);
 
     }
-    private int absAngle( double angle ){
-        if(angle < 0)
+
+    private int absAngle(double angle) {
+        if (angle < 0)
             angle = 360 + angle;
 
-        if(Math.abs(angle) == 360)
+        if (Math.abs(angle) == 360)
             return 0;
 
-        return (int)angle;
+        return (int) angle;
     }
 
-    public int getFace(){
+    public int getFace() {
         int absX = absAngle(angleX.floatValue());
         int absY = absAngle(angleY.floatValue());
         //System.out.println(absX);
@@ -115,12 +102,13 @@ public class Dice extends Observable implements Runnable {
         }
         return ret;
     }
-    public void roll(){
+
+    public void roll() {
         Thread test = new Thread(this);
         test.start();
     }
 
-    public void run(){
+    public void run() {
 
         x = cube.getMesh().getLayoutX();
         y = cube.getMesh().getLayoutY();
@@ -132,12 +120,12 @@ public class Dice extends Observable implements Runnable {
         roll = true;
 
 
-        while(Math.abs(deltaAngleX) > 1 && Math.abs(deltaAngleY) > 1) {
+        while (Math.abs(deltaAngleX) > 1 && Math.abs(deltaAngleY) > 1) {
             rollOneStep();
 
             i++;
             deceleration = deceleration != 0 ? deceleration : 1;
-            if((i % deceleration) == 0){
+            if ((i % deceleration) == 0) {
                 targetAngle();
                 deceleration -= 5;
             }
@@ -147,8 +135,7 @@ public class Dice extends Observable implements Runnable {
                 setChanged();
                 this.notifyObservers(cube);
 
-            }
-            catch (InterruptedException ex){
+            } catch (InterruptedException ex) {
 
             }
         }
@@ -156,19 +143,19 @@ public class Dice extends Observable implements Runnable {
         boolean finishX = false;
         boolean finishY = false;
         int finishDeltaX = angleX.floatValue() % 90 > 45 ? 5 : -5;
-        int finishDeltaY = angleY.floatValue() % 90 > 45  ? 5 : -5;
-        angleX.set(angleX.floatValue() - ( angleX.floatValue() % 5 ));
-        angleY.set(angleY.floatValue() - ( angleY.floatValue() % 5 ));
+        int finishDeltaY = angleY.floatValue() % 90 > 45 ? 5 : -5;
+        angleX.set(angleX.floatValue() - (angleX.floatValue() % 5));
+        angleY.set(angleY.floatValue() - (angleY.floatValue() % 5));
 
-        while (!finishX || !finishY){
+        while (!finishX || !finishY) {
 
-            if((angleX.floatValue() % 90) != 0 )
-                 angleX.set(angleX.floatValue() + finishDeltaX);
+            if ((angleX.floatValue() % 90) != 0)
+                angleX.set(angleX.floatValue() + finishDeltaX);
             else
                 finishX = true;
 
-            if((angleY.floatValue() % 90) != 0 )
-                 angleY.set(angleY.floatValue() + finishDeltaY);
+            if ((angleY.floatValue() % 90) != 0)
+                angleY.set(angleY.floatValue() + finishDeltaY);
             else
                 finishY = true;
 
@@ -176,8 +163,7 @@ public class Dice extends Observable implements Runnable {
                 Thread.sleep(50);
                 setChanged();
                 this.notifyObservers(cube);
-            }
-            catch (InterruptedException ex){
+            } catch (InterruptedException ex) {
 
             }
         }
@@ -188,24 +174,25 @@ public class Dice extends Observable implements Runnable {
         roll = false;
 
     }
-    private void rollOneStep(){
+
+    private void rollOneStep() {
         angleY.set(angleY.floatValue() + deltaAngleY);
-        if(Math.abs(angleY.floatValue()) > 360)
+        if (Math.abs(angleY.floatValue()) > 360)
             angleY.set(0);
 
         //collision du terrain sur l'axe X
-        if(x < (widthTerrain - width + 30) && x > width )
+        if (x < (widthTerrain - width + 30) && x > width)
             x = x + deltaAngleX;
         else {
             deltaAngleX = deltaAngleX * (-1);
             x = x + deltaAngleX;
         }
         angleX.set(angleX.floatValue() + deltaAngleX);
-        if(Math.abs(angleX.floatValue()) > 360)
+        if (Math.abs(angleX.floatValue()) > 360)
             angleX.set(0);
 
         //collision du terrain sur l'axe Y
-        if(y < (heightTerrain - 40) && y > height)
+        if (y < (heightTerrain - 40) && y > height)
             y = y + deltaAngleY;
         else {
             deltaAngleY = deltaAngleY * (-1);
@@ -213,13 +200,13 @@ public class Dice extends Observable implements Runnable {
         }
     }
 
-    private void targetAngle(){
-        if(deltaAngleX > 0)
+    private void targetAngle() {
+        if (deltaAngleX > 0)
             deltaAngleX = deltaAngleX - 1;
         else
             deltaAngleX = deltaAngleX + 1;
 
-        if(deltaAngleY > 0)
+        if (deltaAngleY > 0)
             deltaAngleY = deltaAngleY - 1;
         else
             deltaAngleY = deltaAngleY + 1;
@@ -257,7 +244,7 @@ public class Dice extends Observable implements Runnable {
         return y;
     }
 
-    private void setValue(int value){
+    private void setValue(int value) {
         int signX = Math.random() > 0.5 ? 1 : -1;
         deltaAngleX = value * signX;
         deltaAngleY = value;

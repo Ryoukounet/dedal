@@ -2,7 +2,6 @@ package application;
 
 import core.Dice;
 import core.Player;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -14,29 +13,27 @@ import ui.CubeView;
 
 public class DiceGame {
     //pour l'affichage
-     static Group root;
-     public static Scene scene;
-     static Group dices = new Group();
-     static Parent par;
-     static PerspectiveCamera camera;
+    static Group root;
+    public static Scene scene;
+    static Group dices = new Group();
+    static Parent par;
+    static PerspectiveCamera camera;
 
-     private Stage stage;
-     private Dice dice1 ;
-     private Dice dice2;
-     public static Player player;
-     int nbLancer;
+    private Stage stage;
+    private Dice dice1;
+    private Dice dice2;
+    public static Player player;
+    int nbLancer;
 
-
-
-    public DiceGame(){
-        player = new Player("unnamed",0);
+    public DiceGame() {
+        player = new Player("unnamed", 0);
         nbLancer = 10;
     }
 
-    public void gameInitialize(){
+    public void gameInitialize() {
         try {
             stage = IHM.stage;
-            par =  FXMLLoader.load(getClass().getResource("../resources/Accueil.fxml"));
+            par = FXMLLoader.load(getClass().getResource("../resources/Accueil.fxml"));
             root = new Group(par);
             scene = new Scene(root);
 
@@ -52,10 +49,10 @@ public class DiceGame {
         }
     }
 
-     void start(){
-        if(!isOver()) {
+    void start() {
+        if (!isOver()) {
             clearMap();
-            dice1 = new Dice(new CubeView(), 450 , 200);
+            dice1 = new Dice(new CubeView(), 450, 200);
             dice2 = new Dice(new CubeView(), 250, 250);
             dice1.addObserver(IHM.diceView);
             dice2.addObserver(IHM.diceView);
@@ -66,13 +63,13 @@ public class DiceGame {
         }
     }
 
-     boolean isOver(){
-        if(dice1 == null && dice2 == null )
+    boolean isOver() {
+        if (dice1 == null && dice2 == null)
             return false;
         return dice1.isRoll() || dice2.isRoll();
     }
 
-     private void clearMap(){
+    private void clearMap() {
         dices.getChildren().removeAll(dices.getChildren());
     }
 }

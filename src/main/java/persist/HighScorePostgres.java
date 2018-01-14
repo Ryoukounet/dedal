@@ -2,13 +2,15 @@ package persist;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.util.ArrayList;
 
 public class HighScorePostgres extends HighScore {
 
+    EntityManagerFactory factory = Persistence.createEntityManagerFactory("postgres");
+
     @Override
     public void save(Entry e) {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("postgres");
         entityManager = factory.createEntityManager();
         entityManager.getTransaction().begin();
         addEntry(e.getName(), e.getScore());
@@ -19,7 +21,13 @@ public class HighScorePostgres extends HighScore {
 
     @Override
     public ArrayList<Entry> getEntries() {
-        return null;
+        Query query = factory.createEntityManager().createQuery("SELECT e FROM Entry e");
+        return (ArrayList<Entry>) query.getResultList();
     }
 
+    @Override
+    public ArrayList<Entry> getTenHighestEntries() {
+        Query query = factory.createEntityManager().createQuery("SELECT e FROM Entry e ORDER BY e.score DESC");
+        return (ArrayList<Entry>) query.getResultList();
+    }
 }

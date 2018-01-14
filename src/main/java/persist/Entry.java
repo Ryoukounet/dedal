@@ -3,8 +3,10 @@ package persist;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQuery(name="Entry.TenHighestScore", query="SELECT e FROM Entry e ORDER BY e.score")
 public class Entry {
 
     @Id
@@ -12,8 +14,6 @@ public class Entry {
     private long id;
     private String name;
     private int score;
-
-
 
     public String getName() {
         return name;
@@ -31,7 +31,7 @@ public class Entry {
         this.score = score;
     }
 
-    public  String toString(){
+    public String toString() {
         return name + " : " + score;
     }
 }
